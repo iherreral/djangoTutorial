@@ -11,6 +11,9 @@ class Genre(models.Model):
     name = models.CharField(max_length=200,
                             help_text="Ingrese el nombre del género (p. ej. Ciencia Ficción, Poesía Francesa etc.)")
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self):
         """
         Cadena que representa a la instancia particular del modelo (p. ej. en el sitio de Administración)
@@ -63,6 +66,11 @@ class Book(models.Model):
         """
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_genre(self):
+        """
+        Creates a string for the Genre. This is required to display genre in Admin.
+        """
+        return ', '.join([genre.name for genre in self.genre.all()[:3]])
 
 class BookInstance(models.Model):
     """
