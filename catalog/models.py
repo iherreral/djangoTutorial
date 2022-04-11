@@ -54,6 +54,9 @@ class Book(models.Model):
     # La clase Genre ya ha sido definida, entonces podemos especificar el objeto arriba.
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        ordering = ["title"]
+
     def __str__(self):
         """
         String que representa al objeto Book
@@ -110,6 +113,9 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
+
+    class Meta:
+        ordering = ["last_name"]
 
     def get_absolute_url(self):
         """
