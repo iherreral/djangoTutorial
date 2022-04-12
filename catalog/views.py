@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views import generic
+
 from .models import Book, Author, BookInstance, Genre
 
 
@@ -24,5 +26,45 @@ def index(request):
     )
 
 
-def books(request):
-    pass
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 5
+    context_object_name = 'my_book_list'  # your own name for the list as a template variable
+    # queryset = Book.objects.filter(title__icontains='a')[:5]  # Get 5 books containing the title voces
+    queryset = Book.objects.all()
+    template_name = 'books/book_list.html'  # Specify your own template name/location
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
+    template_name = 'books/book_detail.html'
+
+
+""" Equivalente if not use generic.DetailView.
+def book_detail_view(request,pk):
+    try:
+        book_id=Book.objects.get(pk=pk)
+    except Book.DoesNotExist:
+        raise Http404("Book does not exist")
+
+    #book_id=get_object_or_404(Book, pk=pk)
+
+    return render(
+        request,
+        'catalog/book_detail.html',
+        context={'book':book_id,}
+    )
+"""
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 5
+    context_object_name = 'my_author_list'  # your own name for the list as a template variable
+    queryset = Author.objects.all()
+    template_name = 'authors/author_list.html'  # Specify your own template name/location
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    template_name = 'authors/author_detail.html'
